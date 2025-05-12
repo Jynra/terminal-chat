@@ -88,12 +88,13 @@ void	display_menu(void)
 	system("clear");  /* Clear avant d'afficher le menu principal */
 	print_welcome_banner();
 	
-	printf(CYAN "┌─────────────────────────┐\n");
-	printf("│   Choose your option:   │\n");
-	printf("├─────────────────────────┤\n");
-	printf("│  " GREEN "1" CYAN " - Start Server        │\n");
-	printf("│  " BLUE "2" CYAN " - Connect to Server   │\n");
-	printf("└─────────────────────────┘\n" RESET);
+	/* Utiliser des caractères ASCII pour le menu */
+	printf(CYAN "+-------------------------+\n");
+	printf("|   Choose your option:   |\n");
+	printf("+-------------------------+\n");
+	printf("|  " GREEN "1" CYAN " - Start Server        |\n");
+	printf("|  " BLUE "2" CYAN " - Connect to Server   |\n");
+	printf("+-------------------------+\n" RESET);
 	printf("\nEnter your choice (1 or 2): ");
 }
 

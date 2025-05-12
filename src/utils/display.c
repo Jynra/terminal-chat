@@ -54,20 +54,21 @@ void	print_welcome_banner(void)
 	clear_screen();
 	
 	printf(CYAN BOLD);
+	/* Utiliser des caractères ASCII classiques */
 	for (i = 0; i < width; i++)
-		printf("═");
+		printf("=");
 	printf("\n");
 	
-	printf("║");
+	printf("|");
 	for (i = 0; i < (width - 20) / 2; i++)
 		printf(" ");
 	printf("Terminal Chat App");
 	for (i = 0; i < (width - 20) / 2; i++)
 		printf(" ");
-	printf("║\n");
+	printf("|\n");
 	
 	for (i = 0; i < width; i++)
-		printf("═");
+		printf("=");
 	printf(RESET "\n\n");
 }
 
@@ -103,11 +104,11 @@ void	setup_chat_interface(void)
 	clear_screen();
 	print_welcome_banner();
 	
-	/* Ligne de séparation en bas */
+	/* Ligne de séparation en bas avec caractères ASCII */
 	move_cursor(height - 2, 1);
 	printf(CYAN);
 	for (i = 0; i < width; i++)
-		printf("─");
+		printf("-");
 	printf(RESET "\n");
 	
 	/* Réinitialiser le compteur de lignes */
