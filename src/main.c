@@ -109,11 +109,22 @@ int	get_user_choice(void)
 
 void	get_user_pseudo(char *pseudo)
 {
-	printf("\n" YELLOW "Enter your pseudo: " CYAN);
-	fgets(pseudo, MAX_PSEUDO_LENGTH, stdin);
-	printf(RESET);
+	char	*input;
 	
-	pseudo[strcspn(pseudo, "\n")] = '\0';
+	printf("\n");
+	input = readline(YELLOW "Enter your pseudo: " RESET);
+	
+	if (input && strlen(input) > 0)
+	{
+		strncpy(pseudo, input, MAX_PSEUDO_LENGTH - 1);
+		pseudo[MAX_PSEUDO_LENGTH - 1] = '\0';
+	}
+	else
+	{
+		strcpy(pseudo, "Anonymous");  /* Pseudo par défaut */
+	}
+	
+	free(input);
 }
 
 void	handle_sigint(int sig)

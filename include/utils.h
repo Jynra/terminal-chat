@@ -8,6 +8,8 @@
 # include <unistd.h>
 # include <errno.h>
 # include <sys/ioctl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 # define KEY_LENGTH 16
 # define MAX_PSEUDO_LENGTH 32
@@ -29,7 +31,10 @@ void	print_system_message(const char *message);
 void	print_system_as_message(const char *message);
 void	setup_chat_interface(void);
 void	setup_input_area(void);
-void	setup_input_area_with_pseudo(const char *pseudo);  /* Nouvelle fonction */
+void	setup_input_area_with_pseudo(const char *pseudo);
 void	clear_info_messages(void);
+
+/* Nouvelle fonction pour readline */
+char	*get_input_with_prompt(const char *prompt);
 
 #endif

@@ -139,6 +139,26 @@ void	setup_input_area_with_pseudo(const char *pseudo)
 	fflush(stdout);
 }
 
+char	*get_input_with_prompt(const char *prompt)
+{
+	int		height;
+	char	*input;
+	
+	/* Position le curseur en bas de l'écran */
+	height = get_terminal_height();
+	move_cursor(height - 1, 1);
+	clear_line();
+	
+	/* Utilise readline avec le prompt coloré */
+	input = readline(prompt);
+	
+	/* Ajouter à l'historique si non vide */
+	if (input && *input)
+		add_history(input);
+	
+	return (input);
+}
+
 void	print_bordered_message(const char *message, const char *username, 
 	const char *color, int align_right)
 {

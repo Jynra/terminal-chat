@@ -48,8 +48,7 @@ void	*receive_messages(void *arg)
 			print_system_message(buffer);
 		}
 		
-		/* Remettre le prompt après chaque message reçu avec le pseudo */
-		setup_input_area_with_pseudo(client->pseudo);
+		/* Readline gère la zone d'input automatiquement */
 	}
 	
 	if (read_size == 0)
@@ -64,7 +63,8 @@ void	*receive_messages(void *arg)
 
 void	send_message(t_client *client)
 {
-	char	message[BUFFER_SIZE];
+	char	*input;
+	char	prompt[BUFFER_SIZE];
 	
 	/* Configurer l'interface de chat */
 	setup_chat_interface();
@@ -78,17 +78,18 @@ void	send_message(t_client *client)
 	
 	print_system_message("Type your messages below (Ctrl+C to exit)");
 	
+	/* Préparer le prompt une seule fois */
+	sprintf(prompt, GREEN "%s (You): " RESET, client->pseudo);
+	
 	while (client->running)
 	{
-		/* Positionner le curseur dans la zone d'input avec le pseudo du client */
-		setup_input_area_with_pseudo(client->pseudo);
+		/* Utiliser readline pour l'input avec édition */
+		input = get_input_with_prompt(prompt);
 		
-		if (fgets(message, BUFFER_SIZE, stdin) == NULL)
+		if (!input)  /* Ctrl+D ou erreur */
 			break;
 		
-		message[strcspn(message, "\n")] = '\0';
-		
-		if (strlen(message) > 0)
+		if (strlen(input) > 0)
 		{
 			/* Au premier message envoyé, effacer seulement les infos */
 			if (!client->chat_started)
@@ -100,17 +101,18 @@ void	send_message(t_client *client)
 			/* Affichage local - VOS messages à DROITE avec votre pseudo */
 			char display_name[BUFFER_SIZE];
 			sprintf(display_name, "%s (You)", client->pseudo);
-			print_bordered_message(message, display_name, GREEN, 1);
+			print_bordered_message(input, display_name, GREEN, 1);
 			
-			if (send(client->socket, message, strlen(message), 0) < 0)
+			if (send(client->socket, input, strlen(input), 0) < 0)
 			{
 				log_message("Failed to send message");
+				free(input);
 				break;
 			}
-			
-			/* Effacer la zone d'écriture après envoi avec le pseudo */
-			setup_input_area_with_pseudo(client->pseudo);
 		}
+		
+		/* Libérer la mémoire allouée par readline */
+		free(input);
 	}
 	
 	client_cleanup(client);

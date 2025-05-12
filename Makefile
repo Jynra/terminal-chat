@@ -1,5 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -pthread -I./include
+LDFLAGS = -lreadline
 NAME = chat_app
 
 SRC_DIR = src
@@ -29,7 +30,7 @@ directories:
 	@mkdir -p $(OBJ_DIR)/utils
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
