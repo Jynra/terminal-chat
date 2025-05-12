@@ -1,5 +1,6 @@
 #include "server.h"
 #include "colors.h"
+#include <stdlib.h>  /* Pour system() */
 
 int	init_server(t_server *server, const char *pseudo)
 {
@@ -37,7 +38,8 @@ int	init_server(t_server *server, const char *pseudo)
 
 int	start_server(t_server *server)
 {
-	/* Configurer l'interface de chat pour le serveur */
+	/* Clear l'écran et configurer l'interface de chat pour le serveur */
+	system("clear");
 	setup_chat_interface();
 	
 	char welcome_msg[BUFFER_SIZE];
@@ -138,7 +140,11 @@ int	start_server(t_server *server)
 		
 		char	join_msg[BUFFER_SIZE];
 		sprintf(join_msg, "%s has joined the chat", client_pseudo);
-		print_system_message(join_msg);
+		
+		/* Afficher le message de connexion comme un message normal côté serveur */
+		print_system_as_message(join_msg);
+		
+		/* S'assurer que le message de connexion est diffusé à TOUS les clients */
 		broadcast_message(server, join_msg, -1);
 	}
 	

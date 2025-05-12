@@ -13,6 +13,7 @@ typedef struct s_client
 	char		server_ip[16];
 	pthread_t	recv_thread;
 	int			running;
+	int			chat_started;	/* Nouveau champ pour tracking du début du chat */
 }	t_client;
 
 int		init_client(t_client *client, const char *pseudo, const char *key);

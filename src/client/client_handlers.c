@@ -16,11 +16,26 @@ void	*receive_messages(void *arg)
 	{
 		buffer[read_size] = '\0';
 		
+		/* Au premier message reçu (pas système), effacer seulement les infos */
+		if (!client->chat_started)
+		{
+			/* Vérifier si c'est un vrai message de chat (pas system) */
+			if (sscanf(buffer, "%[^:]:%[^\n]", username, message) == 2 && 
+				strcmp(username, "SYSTEM") != 0)
+			{
+				client->chat_started = 1;
+				clear_info_messages();  /* Efface seulement les infos */
+			}
+		}
+		
 		/* Parser le message: username:message */
 		if (sscanf(buffer, "%[^:]:%[^\n]", username, message) == 2)
 		{
 			if (strcmp(username, "SYSTEM") == 0)
-				print_system_message(message);
+			{
+				/* Afficher les messages système comme des messages normaux */
+				print_system_as_message(message);
+			}
 			else
 			{
 				/* Messages des autres utilisateurs à GAUCHE */
@@ -29,8 +44,12 @@ void	*receive_messages(void *arg)
 		}
 		else
 		{
+			/* Au cas où le format serait différent */
 			print_system_message(buffer);
 		}
+		
+		/* Remettre le prompt après chaque message reçu avec le pseudo */
+		setup_input_area_with_pseudo(client->pseudo);
 	}
 	
 	if (read_size == 0)
@@ -61,8 +80,8 @@ void	send_message(t_client *client)
 	
 	while (client->running)
 	{
-		/* Positionner le curseur dans la zone d'input */
-		setup_input_area();
+		/* Positionner le curseur dans la zone d'input avec le pseudo du client */
+		setup_input_area_with_pseudo(client->pseudo);
 		
 		if (fgets(message, BUFFER_SIZE, stdin) == NULL)
 			break;
@@ -71,14 +90,26 @@ void	send_message(t_client *client)
 		
 		if (strlen(message) > 0)
 		{
-			/* Affichage local - VOS messages à DROITE */
-			print_bordered_message(message, "You", GREEN, 1);
+			/* Au premier message envoyé, effacer seulement les infos */
+			if (!client->chat_started)
+			{
+				client->chat_started = 1;
+				clear_info_messages();  /* Efface seulement les infos */
+			}
+			
+			/* Affichage local - VOS messages à DROITE avec votre pseudo */
+			char display_name[BUFFER_SIZE];
+			sprintf(display_name, "%s (You)", client->pseudo);
+			print_bordered_message(message, display_name, GREEN, 1);
 			
 			if (send(client->socket, message, strlen(message), 0) < 0)
 			{
 				log_message("Failed to send message");
 				break;
 			}
+			
+			/* Effacer la zone d'écriture après envoi avec le pseudo */
+			setup_input_area_with_pseudo(client->pseudo);
 		}
 	}
 	

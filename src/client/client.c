@@ -7,6 +7,7 @@ int	init_client(t_client *client, const char *pseudo, const char *key)
 	strncpy(client->pseudo, pseudo, MAX_PSEUDO_LENGTH - 1);
 	strncpy(client->server_key, key, KEY_LENGTH);
 	client->running = 1;
+	client->chat_started = 0;	/* Initialiser le nouveau champ */
 	
 	client->socket = create_socket();
 	if (client->socket < 0)

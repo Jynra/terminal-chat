@@ -1,4 +1,5 @@
 #include <signal.h>
+#include <stdlib.h>  /* Pour system() */
 #include "server.h"
 #include "client.h"
 #include "colors.h"
@@ -20,11 +21,13 @@ int	main(void)
 	
 	display_menu();
 	choice = get_user_choice();
-	get_user_pseudo(pseudo);
 	
 	if (choice == 1)
 	{
 		t_server	server;
+		
+		/* Pour le serveur, pas besoin de pseudo, utiliser un nom par défaut */
+		strcpy(pseudo, "Server");
 		
 		if (init_server(&server, pseudo) < 0)
 		{
@@ -33,12 +36,7 @@ int	main(void)
 		}
 		
 		g_server = &server;
-		clear_screen();
-		print_welcome_banner();
-		printf(GREEN BOLD "Server successfully started!\n\n" RESET);
-		printf(YELLOW "Server key: " CYAN BOLD "%s\n" RESET, server.key);
-		printf(DIM "Share this key with clients who want to connect\n" RESET);
-		printf(CYAN "─────────────────────────────────────────\n\n" RESET);
+		/* Ne pas afficher de bannière ici, elle sera affichée dans start_server() */
 		
 		start_server(&server);
 		server_cleanup(&server);
@@ -48,13 +46,17 @@ int	main(void)
 		t_client	client;
 		char		server_key[KEY_LENGTH + 1];
 		
-		clear_screen();
+		/* Clear l'écran au début du processus client avec system */
+		system("clear");
 		print_welcome_banner();
 		printf(BLUE "Connecting to server...\n\n" RESET);
 		printf("Enter server key: " CYAN);
 		scanf("%16s", server_key);
 		clear_input_buffer();
 		printf(RESET);
+		
+		/* Demander le pseudo ici, APRÈS la clé */
+		get_user_pseudo(pseudo);
 		
 		if (init_client(&client, pseudo, server_key) < 0)
 		{
@@ -83,6 +85,7 @@ int	main(void)
 
 void	display_menu(void)
 {
+	system("clear");  /* Clear avant d'afficher le menu principal */
 	print_welcome_banner();
 	
 	printf(CYAN "┌─────────────────────────┐\n");

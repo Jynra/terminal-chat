@@ -26,7 +26,10 @@ void	print_welcome_banner(void);
 void	print_bordered_message(const char *message, const char *username, 
 		const char *color, int align_right);
 void	print_system_message(const char *message);
+void	print_system_as_message(const char *message);
 void	setup_chat_interface(void);
 void	setup_input_area(void);
+void	setup_input_area_with_pseudo(const char *pseudo);  /* Nouvelle fonction */
+void	clear_info_messages(void);
 
 #endif
