@@ -23,11 +23,9 @@ void	*receive_messages(void *arg)
 				print_system_message(message);
 			else
 			{
-				/* Choisir une couleur basée sur le nom d'utilisateur */
+				/* Messages des autres utilisateurs à DROITE */
 				const char *color = LIGHT_BLUE;
-				if (strstr(username, client->pseudo) != NULL)
-					color = GREEN;
-				else if (strlen(username) % 2 == 0)
+				if (strlen(username) % 2 == 0)
 					color = PURPLE;
 				
 				print_bordered_message(message, username, color, 1);
@@ -53,16 +51,23 @@ void	send_message(t_client *client)
 {
 	char	message[BUFFER_SIZE];
 	
-	clear_screen();
-	print_welcome_banner();
-	printf(GREEN BOLD "Connected successfully!\n\n" RESET);
-	printf(YELLOW "Server: " CYAN "%s:%d\n" RESET, client->server_ip, PORT);
-	printf(GRAY "Type your messages below (Ctrl+C to exit)\n" RESET);
-	printf(CYAN "─────────────────────────────────────────\n\n" RESET);
+	/* Configurer l'interface de chat */
+	setup_chat_interface();
+	
+	/* Afficher les informations de connexion */
+	print_system_message("Connected successfully!");
+	
+	char server_info[BUFFER_SIZE];
+	sprintf(server_info, "Server: %s:%d", client->server_ip, PORT);
+	print_system_message(server_info);
+	
+	print_system_message("Type your messages below (Ctrl+C to exit)");
 	
 	while (client->running)
 	{
-		printf(GREEN "You: " RESET);
+		/* Positionner le curseur dans la zone d'input */
+		setup_input_area();
+		
 		if (fgets(message, BUFFER_SIZE, stdin) == NULL)
 			break;
 		
@@ -70,8 +75,8 @@ void	send_message(t_client *client)
 		
 		if (strlen(message) > 0)
 		{
-			/* Affichage local avec bordure */
-			print_bordered_message(message, "You", GREEN, 1);
+			/* Affichage local avec bordure - VOS messages à GAUCHE */
+			print_bordered_message(message, "You", GREEN, 0);
 			
 			if (send(client->socket, message, strlen(message), 0) < 0)
 			{

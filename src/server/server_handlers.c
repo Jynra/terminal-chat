@@ -24,7 +24,7 @@ void	*handle_client(void *arg)
 		
 		if (strlen(buffer) > 0)
 		{
-			/* Affichage local avec bordure */
+			/* Affichage local avec bordure - messages côté serveur */
 			print_bordered_message(buffer, 
 				server->clients[client_index].pseudo, 
 				MAGENTA, 0);

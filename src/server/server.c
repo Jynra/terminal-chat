@@ -37,8 +37,15 @@ int	init_server(t_server *server, const char *pseudo)
 
 int	start_server(t_server *server)
 {
-	log_message("Server started with key: %s", server->key);
-	log_message("Waiting for connections on port %d...", PORT);
+	/* Configurer l'interface de chat pour le serveur */
+	setup_chat_interface();
+	
+	char welcome_msg[BUFFER_SIZE];
+	sprintf(welcome_msg, "Server started with key: %s", server->key);
+	print_system_message(welcome_msg);
+	
+	sprintf(welcome_msg, "Waiting for connections on port %d...", PORT);
+	print_system_message(welcome_msg);
 	
 	while (server->running)
 	{
