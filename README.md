@@ -16,7 +16,7 @@ A simple terminal-based chat application that allows communication between machi
 
 To compile the application, simply run:
 
-```make
+`make`
 
 This will generate the executable `chat_app` in the project's root directory.
 
@@ -24,7 +24,7 @@ This will generate the executable `chat_app` in the project's root directory.
 
 To run the application:
 
-```./chat_app
+`./chat_app`
 
 You will be prompted to choose between:
 1. Starting a server
