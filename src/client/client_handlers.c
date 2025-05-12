@@ -23,12 +23,8 @@ void	*receive_messages(void *arg)
 				print_system_message(message);
 			else
 			{
-				/* Messages des autres utilisateurs à DROITE */
-				const char *color = LIGHT_BLUE;
-				if (strlen(username) % 2 == 0)
-					color = PURPLE;
-				
-				print_bordered_message(message, username, color, 1);
+				/* Messages des autres utilisateurs à GAUCHE */
+				print_bordered_message(message, username, CYAN, 0);
 			}
 		}
 		else
@@ -75,8 +71,8 @@ void	send_message(t_client *client)
 		
 		if (strlen(message) > 0)
 		{
-			/* Affichage local avec bordure - VOS messages à GAUCHE */
-			print_bordered_message(message, "You", GREEN, 0);
+			/* Affichage local - VOS messages à DROITE */
+			print_bordered_message(message, "You", GREEN, 1);
 			
 			if (send(client->socket, message, strlen(message), 0) < 0)
 			{

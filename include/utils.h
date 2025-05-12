@@ -12,7 +12,6 @@
 # define KEY_LENGTH 16
 # define MAX_PSEUDO_LENGTH 32
 # define BUFFER_SIZE 1024
-# define INPUT_HEIGHT 3
 
 void	generate_random_key(char *key, int length);
 void	clear_input_buffer(void);
@@ -28,10 +27,6 @@ void	print_bordered_message(const char *message, const char *username,
 		const char *color, int align_right);
 void	print_system_message(const char *message);
 void	setup_chat_interface(void);
-void	move_cursor(int row, int col);
-void	clear_line(void);
-void	save_cursor_position(void);
-void	restore_cursor_position(void);
 void	setup_input_area(void);
 
 #endif

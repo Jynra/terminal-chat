@@ -47,6 +47,9 @@ int	start_server(t_server *server)
 	sprintf(welcome_msg, "Waiting for connections on port %d...", PORT);
 	print_system_message(welcome_msg);
 	
+	sprintf(welcome_msg, "Share this key with clients: %s", server->key);
+	print_system_message(welcome_msg);
+	
 	while (server->running)
 	{
 		int					i;
