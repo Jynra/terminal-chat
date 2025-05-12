@@ -7,6 +7,7 @@
 void	display_menu(void);
 int		get_user_choice(void);
 void	get_user_pseudo(char *pseudo);
+void	get_server_key(char *server_key);
 void	handle_sigint(int sig);
 
 t_server	*g_server = NULL;
@@ -50,10 +51,9 @@ int	main(void)
 		system("clear");
 		print_welcome_banner();
 		printf(BLUE "Connecting to server...\n\n" RESET);
-		printf("Enter server key: " CYAN);
-		scanf("%16s", server_key);
-		clear_input_buffer();
-		printf(RESET);
+		
+		/* Utiliser readline pour la clé */
+		get_server_key(server_key);
 		
 		/* Demander le pseudo ici, APRÈS la clé */
 		get_user_pseudo(pseudo);
@@ -107,12 +107,32 @@ int	get_user_choice(void)
 	return (choice);
 }
 
+void	get_server_key(char *server_key)
+{
+	char	*input;
+	
+	input = readline(YELLOW "Enter server key: " CYAN);
+	
+	if (input && strlen(input) > 0)
+	{
+		strncpy(server_key, input, KEY_LENGTH);
+		server_key[KEY_LENGTH] = '\0';
+	}
+	else
+	{
+		strcpy(server_key, "");  /* Clé vide si rien entré */
+	}
+	
+	printf(RESET);
+	free(input);
+}
+
 void	get_user_pseudo(char *pseudo)
 {
 	char	*input;
 	
 	printf("\n");
-	input = readline(YELLOW "Enter your pseudo: " RESET);
+	input = readline(YELLOW "Enter your pseudo: " CYAN);
 	
 	if (input && strlen(input) > 0)
 	{
@@ -124,6 +144,7 @@ void	get_user_pseudo(char *pseudo)
 		strcpy(pseudo, "Anonymous");  /* Pseudo par défaut */
 	}
 	
+	printf(RESET);
 	free(input);
 }
 

@@ -144,12 +144,12 @@ char	*get_input_with_prompt(const char *prompt)
 	int		height;
 	char	*input;
 	
-	/* Position le curseur en bas de l'écran */
+	/* Position le curseur en bas de l'écran et efface la ligne */
 	height = get_terminal_height();
 	move_cursor(height - 1, 1);
 	clear_line();
 	
-	/* Utilise readline avec le prompt coloré */
+	/* Utilise readline avec le prompt */
 	input = readline(prompt);
 	
 	/* Ajouter à l'historique si non vide */

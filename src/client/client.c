@@ -19,11 +19,22 @@ int	init_client(t_client *client, const char *pseudo, const char *key)
 int	connect_client(t_client *client)
 {
 	t_connection	conn;
+	char			*input;
 	
-	printf("Enter server IP address: " CYAN);
-	scanf("%15s", client->server_ip);
+	input = readline(YELLOW "Enter server IP address: " CYAN);
+	
+	if (input && strlen(input) > 0)
+	{
+		strncpy(client->server_ip, input, 15);
+		client->server_ip[15] = '\0';
+	}
+	else
+	{
+		strcpy(client->server_ip, "127.0.0.1");  /* IP par défaut */
+	}
+	
 	printf(RESET);
-	clear_input_buffer();
+	free(input);
 	
 	conn.socket = client->socket;
 	if (connect_to_server(&conn, client->server_ip) < 0)

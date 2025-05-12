@@ -48,7 +48,8 @@ void	*receive_messages(void *arg)
 			print_system_message(buffer);
 		}
 		
-		/* Readline gère la zone d'input automatiquement */
+		/* Remettre le prompt après chaque message reçu avec le pseudo */
+		setup_input_area_with_pseudo(client->pseudo);
 	}
 	
 	if (read_size == 0)
@@ -83,7 +84,7 @@ void	send_message(t_client *client)
 	
 	while (client->running)
 	{
-		/* Utiliser readline pour l'input avec édition */
+		/* Position le curseur en bas et utilise readline */
 		input = get_input_with_prompt(prompt);
 		
 		if (!input)  /* Ctrl+D ou erreur */

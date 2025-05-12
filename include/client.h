@@ -2,6 +2,8 @@
 # define CLIENT_H
 
 # include <pthread.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include "network.h"
 # include "utils.h"
 
@@ -13,7 +15,7 @@ typedef struct s_client
 	char		server_ip[16];
 	pthread_t	recv_thread;
 	int			running;
-	int			chat_started;	/* Nouveau champ pour tracking du début du chat */
+	int			chat_started;
 }	t_client;
 
 int		init_client(t_client *client, const char *pseudo, const char *key);
