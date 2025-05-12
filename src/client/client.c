@@ -1,4 +1,5 @@
 #include "client.h"
+#include "colors.h"
 
 int	init_client(t_client *client, const char *pseudo, const char *key)
 {
@@ -18,8 +19,9 @@ int	connect_client(t_client *client)
 {
 	t_connection	conn;
 	
-	printf("Enter server IP address: ");
+	printf("Enter server IP address: " CYAN);
 	scanf("%15s", client->server_ip);
+	printf(RESET);
 	clear_input_buffer();
 	
 	conn.socket = client->socket;
@@ -29,20 +31,18 @@ int	connect_client(t_client *client)
 		return (-1);
 	}
 	
-	// Envoyer la clé (sans retour à la ligne)
+	/* Envoyer la clé (sans retour à la ligne) */
 	if (send(client->socket, client->server_key, KEY_LENGTH, 0) < 0)
 	{
 		log_message("Failed to send key");
 		return (-1);
 	}
 	
-	// Petite pause pour s'assurer que la clé est bien reçue
+	/* Petite pause pour s'assurer que la clé est bien reçue */
 	usleep(10000);
 	
-	// Envoyer le pseudo (avec retour à la ligne pour marquer la fin)
-	char pseudo_msg[MAX_PSEUDO_LENGTH + 1];
-	sprintf(pseudo_msg, "%s", client->pseudo);
-	if (send(client->socket, pseudo_msg, strlen(pseudo_msg), 0) < 0)
+	/* Envoyer le pseudo */
+	if (send(client->socket, client->pseudo, strlen(client->pseudo), 0) < 0)
 	{
 		log_message("Failed to send pseudo");
 		return (-1);

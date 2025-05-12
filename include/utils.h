@@ -7,6 +7,7 @@
 # include <time.h>
 # include <unistd.h>
 # include <errno.h>
+# include <sys/ioctl.h>
 
 # define KEY_LENGTH 16
 # define MAX_PSEUDO_LENGTH 32
@@ -16,5 +17,13 @@ void	generate_random_key(char *key, int length);
 void	clear_input_buffer(void);
 void	log_message(const char *format, ...);
 void	error_exit(const char *message);
+
+/* Nouvelles fonctions pour l'affichage */
+void	clear_screen(void);
+int		get_terminal_width(void);
+void	print_welcome_banner(void);
+void	print_bordered_message(const char *message, const char *username, 
+		const char *color, int align_right);
+void	print_system_message(const char *message);
 
 #endif

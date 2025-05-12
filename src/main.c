@@ -1,6 +1,7 @@
 #include <signal.h>
 #include "server.h"
 #include "client.h"
+#include "colors.h"
 
 void	display_menu(void);
 int		get_user_choice(void);
@@ -32,8 +33,12 @@ int	main(void)
 		}
 		
 		g_server = &server;
-		log_message("Server key: %s", server.key);
-		log_message("Share this key with clients who want to connect");
+		clear_screen();
+		print_welcome_banner();
+		printf(GREEN BOLD "Server successfully started!\n\n" RESET);
+		printf(YELLOW "Server key: " CYAN BOLD "%s\n" RESET, server.key);
+		printf(DIM "Share this key with clients who want to connect\n" RESET);
+		printf(CYAN "─────────────────────────────────────────\n\n" RESET);
 		
 		start_server(&server);
 		server_cleanup(&server);
@@ -43,9 +48,13 @@ int	main(void)
 		t_client	client;
 		char		server_key[KEY_LENGTH + 1];
 		
-		printf("Enter server key: ");
+		clear_screen();
+		print_welcome_banner();
+		printf(BLUE "Connecting to server...\n\n" RESET);
+		printf("Enter server key: " CYAN);
 		scanf("%16s", server_key);
 		clear_input_buffer();
+		printf(RESET);
 		
 		if (init_client(&client, pseudo, server_key) < 0)
 		{
@@ -65,7 +74,7 @@ int	main(void)
 	}
 	else
 	{
-		log_message("Invalid choice. Exiting...");
+		printf(RED "Invalid choice. Exiting...\n" RESET);
 		return (1);
 	}
 	
@@ -74,10 +83,15 @@ int	main(void)
 
 void	display_menu(void)
 {
-	printf("===== Terminal Chat =====\n");
-	printf("1 - Start Server\n");
-	printf("2 - Connect to Server\n");
-	printf("Choose an option (1 or 2): ");
+	print_welcome_banner();
+	
+	printf(CYAN "┌─────────────────────────┐\n");
+	printf("│   Choose your option:   │\n");
+	printf("├─────────────────────────┤\n");
+	printf("│  " GREEN "1" CYAN " - Start Server        │\n");
+	printf("│  " BLUE "2" CYAN " - Connect to Server   │\n");
+	printf("└─────────────────────────┘\n" RESET);
+	printf("\nEnter your choice (1 or 2): ");
 }
 
 int	get_user_choice(void)
@@ -92,8 +106,9 @@ int	get_user_choice(void)
 
 void	get_user_pseudo(char *pseudo)
 {
-	printf("Enter your pseudo: ");
+	printf("\n" YELLOW "Enter your pseudo: " CYAN);
 	fgets(pseudo, MAX_PSEUDO_LENGTH, stdin);
+	printf(RESET);
 	
 	pseudo[strcspn(pseudo, "\n")] = '\0';
 }
@@ -102,7 +117,7 @@ void	handle_sigint(int sig)
 {
 	(void)sig;
 	
-	printf("\nExiting chat application...\n");
+	printf("\n\n" YELLOW "Exiting chat application...\n" RESET);
 	
 	if (g_server)
 		server_cleanup(g_server);

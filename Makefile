@@ -14,7 +14,8 @@ SRCS = $(SRC_DIR)/main.c \
        $(SRC_DIR)/network/connection.c \
        $(SRC_DIR)/utils/key_generator.c \
        $(SRC_DIR)/utils/logger.c \
-       $(SRC_DIR)/utils/error_handler.c
+       $(SRC_DIR)/utils/error_handler.c \
+       $(SRC_DIR)/utils/display.c
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

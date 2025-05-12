@@ -1,4 +1,5 @@
 #include "server.h"
+#include "colors.h"
 
 int	init_server(t_server *server, const char *pseudo)
 {
@@ -56,7 +57,7 @@ int	start_server(t_server *server)
 			continue;
 		}
 		
-		// Recevoir exactement KEY_LENGTH caractères pour la clé
+		/* Recevoir exactement KEY_LENGTH caractères pour la clé */
 		bytes_read = recv(client_socket, client_key, KEY_LENGTH, MSG_WAITALL);
 		if (bytes_read != KEY_LENGTH)
 		{
@@ -74,7 +75,7 @@ int	start_server(t_server *server)
 			continue;
 		}
 		
-		// Recevoir le pseudo
+		/* Recevoir le pseudo */
 		bytes_read = recv(client_socket, client_pseudo, MAX_PSEUDO_LENGTH - 1, 0);
 		if (bytes_read <= 0)
 		{
@@ -84,10 +85,10 @@ int	start_server(t_server *server)
 		}
 		
 		client_pseudo[bytes_read] = '\0';
-		// Supprimer les retours à la ligne s'ils existent
+		/* Supprimer les retours à la ligne s'ils existent */
 		client_pseudo[strcspn(client_pseudo, "\r\n")] = '\0';
 		
-		// Trouver un slot libre pour le client
+		/* Trouver un slot libre pour le client */
 		pthread_mutex_lock(&server->mutex);
 		for (i = 0; i < MAX_CLIENTS; i++)
 		{
@@ -100,7 +101,7 @@ int	start_server(t_server *server)
 				client = &server->clients[i];
 				server->client_count++;
 				
-				// Créer une structure pour passer au thread
+				/* Créer une structure pour passer au thread */
 				typedef struct {
 					t_server *server;
 					int client_index;
@@ -127,6 +128,7 @@ int	start_server(t_server *server)
 		
 		char	join_msg[BUFFER_SIZE];
 		sprintf(join_msg, "%s has joined the chat", client_pseudo);
+		print_system_message(join_msg);
 		broadcast_message(server, join_msg, -1);
 	}
 	
